@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(home)/instructors/page": "app/(home)/instructors/page.js",
+  "/(shop)/professional-feet/[slug]/page": "app/(shop)/professional-feet/[slug]/page.js",
+  "/(shop)/professional-feet/page": "app/(shop)/professional-feet/page.js",
+  "/(shop)/feeto-care/page": "app/(shop)/feeto-care/page.js",
+  "/about/page": "app/about/page.js",
+  "/contacts/page": "app/contacts/page.js",
+  "/dealers/[country]/page": "app/dealers/[country]/page.js",
+  "/faq/page": "app/faq/page.js",
+  "/page": "app/page.js",
+  "/quick-order/page": "app/quick-order/page.js"
+}

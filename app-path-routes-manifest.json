@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/(home)/instructors/page": "/instructors",
+  "/(shop)/professional-feet/[slug]/page": "/professional-feet/[slug]",
+  "/(shop)/professional-feet/page": "/professional-feet",
+  "/(shop)/feeto-care/page": "/feeto-care",
+  "/about/page": "/about",
+  "/contacts/page": "/contacts",
+  "/dealers/[country]/page": "/dealers/[country]",
+  "/faq/page": "/faq",
+  "/page": "/",
+  "/quick-order/page": "/quick-order"
+}

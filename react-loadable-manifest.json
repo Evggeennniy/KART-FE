@@ -1,0 +1,26 @@
+{
+  "node_modules\\next\\dist\\client\\index.js -> ../pages/_app": {
+    "id": 472,
+    "files": [
+      "static/chunks/472.a3826d29d6854395.js"
+    ]
+  },
+  "node_modules\\next\\dist\\client\\index.js -> ../pages/_error": {
+    "id": 9341,
+    "files": [
+      "static/chunks/341.df3329d77a5faa19.js"
+    ]
+  },
+  "pages\\Instructors\\InstructorClient.js -> ./Instructors": {
+    "id": 2564,
+    "files": [
+      "static/chunks/587-909e8c62a1464fd1.js",
+      "static/chunks/552-547b1772fccb5b88.js",
+      "static/chunks/0-b2520fd2ae4cc697.js",
+      "static/chunks/594.bff88f7961da28b0.js",
+      "static/chunks/63-937075b29b7e27f5.js",
+      "static/chunks/874-01b37e108ca9e930.js",
+      "static/chunks/564.f5c5ab9ba78f2133.js"
+    ]
+  }
+}
