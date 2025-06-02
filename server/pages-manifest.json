@@ -1,16 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/HomePage/BlogLst": "pages/HomePage/BlogLst.html",
-  "/HomePage/FlagList": "pages/HomePage/FlagList.html",
-  "/HomePage/InstructorsList": "pages/HomePage/InstructorsList.html",
-  "/HomePage/HomePage": "pages/HomePage/HomePage.html",
-  "/HomePage/OrderСonditionsList": "pages/HomePage/OrderСonditionsList.html",
-  "/Instructors/InstructorCard": "pages/Instructors/InstructorCard.html",
-  "/Instructors/InstructorClient": "pages/Instructors/InstructorClient.html",
-  "/Instructors/Instructors": "pages/Instructors/Instructors.html",
-  "/quick-order/ProductList": "pages/quick-order/ProductList.html",
-  "/quick-order/ProductSection": "pages/quick-order/ProductSection.html",
-  "/_document": "pages/_document.js",
-  "/404": "pages/404.html"
-}
+{}

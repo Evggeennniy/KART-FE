@@ -96,7 +96,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\Frontend\\Fart\\KART",
+    "outputFileTracingRoot": "C:\\WorkPlace\\Documents\\ClientsProjects\\KART",
     "experimental": {
       "nodeMiddleware": false,
       "cacheLife": {
@@ -154,7 +154,7 @@
       "middlewarePrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 11,
+      "cpus": 7,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -279,10 +279,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.mjs",
     "turbopack": {
-      "root": "D:\\Frontend\\Fart\\KART"
+      "root": "C:\\WorkPlace\\Documents\\ClientsProjects\\KART"
     }
   },
-  "appDir": "D:\\Frontend\\Fart\\KART",
+  "appDir": "C:\\WorkPlace\\Documents\\ClientsProjects\\KART",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",

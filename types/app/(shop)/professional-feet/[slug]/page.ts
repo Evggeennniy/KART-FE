@@ -1,4 +1,4 @@
-// File: D:\Frontend\Fart\KART\app\(shop)\professional-feet\[slug]\page.js
+// File: C:\WorkPlace\Documents\ClientsProjects\KART\app\(shop)\professional-feet\[slug]\page.js
 import * as entry from '../../../../../../app/(shop)/professional-feet/[slug]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

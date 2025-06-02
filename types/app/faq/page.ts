@@ -1,4 +1,4 @@
-// File: D:\Frontend\Fart\KART\app\faq\page.js
+// File: C:\WorkPlace\Documents\ClientsProjects\KART\app\faq\page.js
 import * as entry from '../../../../app/faq/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
