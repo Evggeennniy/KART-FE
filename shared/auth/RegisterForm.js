@@ -12,6 +12,7 @@ import Field from "../ui/Field/Field";
 import RadioGroup from "../ui/RadioGroup/RadioGroup";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import PasswordInput from "../ui/PasswordInput/PasswordInput";
 
 const countries = [
   "Россия",
@@ -137,15 +138,15 @@ const RegisterForm = ({ toggleAuthMode }) => {
         name="name"
       />
 
-      <Field
+      <PasswordInput
         label={t("fields.password")}
+        name="password"
         value={passwordValue}
         onChange={handlePasswordChange}
         onBlur={handlePasswordBlur}
         error={passwordError}
-        name="password"
+        type="password"
       />
-
       <Field
         label={t("fields.email")}
         value={emailValue}
@@ -198,18 +199,20 @@ const RegisterForm = ({ toggleAuthMode }) => {
       {isRegistered && (
         <p className="text-green-500 text-center text-sm">{t("success")}</p>
       )}
-      {reduxError &&
-        !isRegistered &&
-        Object.entries(reduxError).map(([field, messages]) =>
-          messages.map((msg, i) => (
-            <p
-              key={`${field}-${i}`}
-              className="text-red-500 text-sm text-center"
-            >
-              {msg}
-            </p>
-          ))
-        )}
+      {typeof reduxError === "object" && reduxError !== null && !isRegistered
+        ? Object.entries(reduxError).map(([field, messages]) =>
+            (Array.isArray(messages) ? messages : [messages]).map((msg, i) => (
+              <p
+                key={`${field}-${i}`}
+                className="text-red-500 text-sm text-center"
+              >
+                {msg}
+              </p>
+            ))
+          )
+        : reduxError && (
+            <p className="text-red-500 text-sm text-center">{reduxError}</p>
+          )}
       <Button
         type="submit"
         disabled={loading}

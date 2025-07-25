@@ -9,28 +9,14 @@ import { addToCart } from "../../redux/reducer/cartSlice";
 import { useFormattedPrice } from "../../hooks/useFormattedPrice";
 import { Link } from "../../i18n/navigation";
 import { useParams } from "next/navigation";
-// {
-//   "id": 2,
-//   "name": "Название [en]",
-//   "description": "Описание [en]",
-//   "how_to_use": "Способ применения [en]",
-//   "ingredients": "Ингридиенты [en]",
-//   "code": "1001",
-//   "price": "32.00",
-//   "stock": 0,
-//   "image": "http://localhost:8000/products/Adam.jpg",
-//   "category": {
-//     "id": 1,
-//     "name": "popa"
-//   }
-// }
+
 function ShopItem({ product }) {
   const dispatch = useDispatch();
   const { slug_category } = useParams();
 
   const formattedPrice = useFormattedPrice(product.price);
-  const formattedDiscountedPrice = useFormattedPrice(product.stock);
-  console.log("Product:", product);
+  const formattedDiscountedPrice = useFormattedPrice(product.stock || 0);
+
   return (
     <div
       key={product.id}
@@ -39,7 +25,7 @@ function ShopItem({ product }) {
       <Link href={`/categories/${slug_category}/${product.slug}`}>
         <Image
           className="w-full object-cover rounded-2xl"
-          src={product.image}
+          src={product.image1}
           alt={product.name}
           width={340}
           height={200}
@@ -48,7 +34,7 @@ function ShopItem({ product }) {
           <div className="flex justify-between">
             <p className="text-[#3C5E23]">{product.name}</p>
             <p className="text-[15px] text-[#82A469] line-through">
-              {formattedDiscountedPrice}
+              {formattedDiscountedPrice || " "}
             </p>
           </div>
           <div className="flex justify-between text-[#3C5E23]">

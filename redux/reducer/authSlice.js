@@ -31,6 +31,37 @@ export const registerUserAction = createAsyncThunk(
     }
   }
 );
+
+export const patchPersonalProfileAction = createAsyncThunk(
+  "profile/patchPersonal",
+  async ({ locale, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await fetchWithAuth(
+        `${API_URL}/users/personal-details/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Accept-Language": locale,
+          },
+          body: payload,
+        },
+        (newAccess) => dispatch(setTokens({ access: newAccess })),
+        () => dispatch(logout())
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return rejectWithValue(data?.detail || "Unknown server error");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Network error");
+    }
+  }
+);
+
 export const getPersonalProfileAction = createAsyncThunk(
   "profile/getPersonal",
   async (locale, { getState, dispatch, rejectWithValue }) => {
@@ -88,29 +119,55 @@ export const getDeliveryDetailsAction = createAsyncThunk(
     }
   }
 );
+export const patchDeliveryDetailsAction = createAsyncThunk(
+  "profile/patchDeliveryDetails",
+  async ({ locale, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await fetchWithAuth(
+        `${API_URL}/users/delivery-details/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Accept-Language": locale,
+          },
+          body: payload,
+        },
+        (newAccess) => dispatch(setTokens({ access: newAccess })),
+        () => dispatch(logout())
+      );
 
+      const data = await res.json();
+
+      if (!res.ok) {
+        return rejectWithValue(data?.detail || "Unknown server error");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Network error");
+    }
+  }
+);
 export const loginUserAction = createAsyncThunk(
   "user/login",
   async (payload, { rejectWithValue }) => {
     try {
-      const config = {
+      const res = await fetch(API_URL + "/users/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify(payload),
-      };
-
-      const res = await fetch(API_URL + "/users/login/", config);
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        return rejectWithValue(errorData);
-      }
+      });
 
       const data = await res.json();
-      return data; // user info or success message; tokens are in cookies
+
+      if (!res.ok) {
+        return rejectWithValue(data?.detail || "Unknown server error");
+      }
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.message || "Network error");
     }

@@ -9,10 +9,11 @@ import { Check, LogIn } from "lucide-react";
 import Title from "../ui/title/Title";
 import Text from "../ui/text/Text";
 import Field from "../ui/Field/Field";
-
+import PasswordInput from "../ui/PasswordInput/PasswordInput";
 import { useTranslations } from "next-intl";
+import { Link } from "../../i18n/navigation";
 
-const LoginForm = ({ toggleAuthMode }) => {
+const LoginForm = ({ toggleAuthMode, openForgotPassword }) => {
   const t = useTranslations("LoginForm");
   const dispatch = useDispatch();
   const { loading, error, isLoggedIn } = useSelector((state) => state.auth);
@@ -50,6 +51,9 @@ const LoginForm = ({ toggleAuthMode }) => {
         password: passwordValue,
       })
     );
+
+    handleEmailChange({ target: { value: "" } });
+    handlePasswordChange({ target: { value: "" } });
   };
 
   return (
@@ -73,15 +77,24 @@ const LoginForm = ({ toggleAuthMode }) => {
         name="name"
       />
 
-      <Field
+      <PasswordInput
         label={t("password")}
+        name="password"
         value={passwordValue}
         onChange={handlePasswordChange}
         onBlur={handlePasswordBlur}
         error={passwordError}
-        name="password"
+        type="password"
       />
 
+      <div className="text-center mt-2">
+        <button
+          onClick={openForgotPassword}
+          className="text-primary cursor-pointer text-sm"
+        >
+          {t("forgotPassword")}
+        </button>
+      </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       {isLoggedIn && <p className="text-green-500 text-sm">{t("success")}</p>}
 
@@ -94,7 +107,7 @@ const LoginForm = ({ toggleAuthMode }) => {
           {loading ? t("loading") : t("login")}
         </button>
         <button
-          onClick={toggleAuthMode}
+          onClick={() => toggleAuthMode("register")}
           type="button"
           disabled={loading}
           className="w-full border border-[#49BA4A] text-[#49BA4A] py-2 rounded"
