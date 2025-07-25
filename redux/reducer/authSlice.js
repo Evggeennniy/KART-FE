@@ -119,7 +119,35 @@ export const getDeliveryDetailsAction = createAsyncThunk(
     }
   }
 );
+export const patchDeliveryDetailsAction = createAsyncThunk(
+  "profile/patchDeliveryDetails",
+  async ({ locale, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await fetchWithAuth(
+        `${API_URL}/users/delivery-details/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Accept-Language": locale,
+          },
+          body: payload,
+        },
+        (newAccess) => dispatch(setTokens({ access: newAccess })),
+        () => dispatch(logout())
+      );
 
+      const data = await res.json();
+
+      if (!res.ok) {
+        return rejectWithValue(data?.detail || "Unknown server error");
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Network error");
+    }
+  }
+);
 export const loginUserAction = createAsyncThunk(
   "user/login",
   async (payload, { rejectWithValue }) => {

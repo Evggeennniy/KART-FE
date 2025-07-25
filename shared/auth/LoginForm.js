@@ -9,7 +9,7 @@ import { Check, LogIn } from "lucide-react";
 import Title from "../ui/title/Title";
 import Text from "../ui/text/Text";
 import Field from "../ui/Field/Field";
-
+import PasswordInput from "../ui/PasswordInput/PasswordInput";
 import { useTranslations } from "next-intl";
 import { Link } from "../../i18n/navigation";
 
@@ -77,14 +77,16 @@ const LoginForm = ({ toggleAuthMode, openForgotPassword }) => {
         name="name"
       />
 
-      <Field
+      <PasswordInput
         label={t("password")}
+        name="password"
         value={passwordValue}
         onChange={handlePasswordChange}
         onBlur={handlePasswordBlur}
         error={passwordError}
-        name="password"
+        type="password"
       />
+
       <div className="text-center mt-2">
         <button
           onClick={openForgotPassword}

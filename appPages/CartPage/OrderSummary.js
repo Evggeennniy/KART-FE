@@ -39,7 +39,8 @@ function OrderSummary({ cartProducts }) {
 
   // Сумма с учетом скидок        p.discountedPrice
   const totalDiscountedEur =
-    cartProducts.reduce((acc, p) => acc + 290 * p.quantity, 0) + deliveryFee;
+    cartProducts.reduce((acc, p) => acc + p.price * p.quantity, 0) +
+    deliveryFee;
 
   // Акционная скидка (разница между общей и с учетом скидок)
   const promoDiscountEur = totalOriginalEur - totalDiscountedEur;

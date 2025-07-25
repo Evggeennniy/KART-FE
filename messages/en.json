@@ -649,7 +649,8 @@
     "addToCart": "Add to Cart",
     "usage": "How to Use",
     "ingredients": "Ingredients List",
-    "popularProducts": "Popular Products"
+    "popularProducts": "Popular Products",
+    "added": "Added"
   },
   "QuickProductSection": {
     "product": "Product",

@@ -13,9 +13,12 @@ import { useEffect } from "react";
 
 export default function CartPage() {
   const t = useTranslations("CartPage");
+
   const cartItems = useSelector(selectCartItems);
   const cartProducts = useSelector((state) => state.cart.cartProducts);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (cartItems.length > 0) {
       const ids = cartItems.map((item) => item.id);

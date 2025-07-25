@@ -1,6 +1,6 @@
 "use client";
 import HintNavigation from "../../../../../../shared/hint-navigation/HintNavigation";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Check, Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import productImage from "../../../../../../public/assets/image/product.png";
@@ -12,23 +12,40 @@ import { useFormattedPrice } from "../../../../../../hooks/useFormattedPrice";
 import Title from "../../../../../../shared/ui/title/Title";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../../../../../../data/url";
+import {
+  addToCart,
+  addToCartQuick,
+  removeFromCart,
+} from "../../../../../../redux/reducer/cartSlice";
+import Button from "../../../../../../shared/ui/button/Button";
 export default function Page() {
   const t = useTranslations("ProductDescription");
+  const locale = useLocale();
+
   const { slug_category, slug } = useParams();
   const [tab, setTab] = useState("usage");
-  const locale = useLocale();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(0);
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const hasUsage = product?.how_to_use?.trim();
+  const hasIngredients = product?.ingredients?.trim();
+
+  const dispatch = useDispatch();
 
   const byCategory = useSelector((state) => state.cart.byCategory);
   const productsInCategory = byCategory?.[slug_category]?.products;
+
   const formattedDiscountedPrice = useFormattedPrice(
     product?.stock || product?.price || 0
   );
   console.log("Products in category:", productsInCategory);
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -70,6 +87,20 @@ export default function Page() {
   if (error) return <div>Error: {error}</div>;
   if (!product) return <div>Product not found</div>;
 
+  console.log(product);
+  const handleAddToCart = () => {
+    console.log("Adding to cart:", product.id, quantity);
+
+    if (quantity > 0) {
+      dispatch(addToCartQuick({ id: product.id, quantity }));
+      setQuantity(0);
+      setAddedToCart(true);
+
+      setTimeout(() => {
+        setAddedToCart(false);
+      }, 3000);
+    }
+  };
   return (
     <section className=" w-full text-color ">
       <div className="flex  justify-center items-center mb-[44px]">
@@ -88,7 +119,7 @@ export default function Page() {
       <div className="flex gap-3 flex-wrap mb-[40px] h-full lg:flex-nowrap  w-full">
         <div className="relative w-full lg:w-1/2 aspect-[4/3] rounded-2xl ">
           <Image
-            src={product.image}
+            src={product.image1}
             alt={product.name}
             fill
             className="object-cover  p-8"
@@ -103,7 +134,7 @@ export default function Page() {
             </div>
 
             <div className="text-sm text-right min-w-[80px] shrink-0 text-color">
-              {t("code")}: {product.id}
+              {t("code")}: {product.code}
             </div>
           </div>
 
@@ -123,22 +154,48 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center  rounded px-2 py-1">
-                <button>
-                  <Minus className="w-8 h-8 p-2 cursor-pointer text-color" />
+                <button
+                  onClick={() => setQuantity((p) => Math.max(p - 1, 0))}
+                  className="text-[15px] p-2 cursor-pointer"
+                >
+                  <Minus size={16} />
                 </button>
-                <span className="px-1 lg:px-3 text-color">0</span>
-                <button>
-                  <Plus className="w-8 h-8 p-2 cursor-pointer text-color" />
+                <span className="text-lg font-bold">{quantity}</span>
+                <button
+                  onClick={() => setQuantity((p) => p + 1)}
+                  className="text-[15px] p-2 cursor-pointer"
+                >
+                  <Plus size={16} />
                 </button>
               </div>
-              <button className="flex items-center text-color gap-2 shadow-sm w-fit cursor-pointer text-[15px] lg:text-sm px-4 py-2 rounded-md hover:bg-gray-200">
-                <ShoppingCart className="w-4 h-4 text-color" />
-                <span className="hidden lg:block">{t("addToCart")}</span>
-              </button>
+              <Button
+                onClick={handleAddToCart}
+                disabled={quantity === 0}
+                className="w-full py-1 text-sm sm:text-lg font-medium rounded-lg text-black flex items-center justify-center"
+                bgColor="bg-transparent shadow-sm!"
+              >
+                {addedToCart ? (
+                  <span className="text-green-600 flex items-center gap-1">
+                    <Check size={20} />
+                    <span className="hidden lg:inline text-[#848484]">
+                      {t("added")}
+                    </span>
+                  </span>
+                ) : (
+                  <>
+                    <span className="lg:hidden">
+                      <ShoppingCart size={20} color="#000000" />
+                    </span>
+                    <span className="hidden lg:inline text-[#848484]">
+                      {t("addToCart")}
+                    </span>
+                  </>
+                )}
+              </Button>
             </div>
           </div>
 
-          <div className="border-b flex gap-4 border-gray-200 mb-4 ">
+          {/* <div className="border-b flex gap-4 border-gray-200 mb-4 ">
             <button
               className={`py-2 text-sm ${
                 tab === "usage"
@@ -169,20 +226,70 @@ export default function Page() {
                 {product.ingredients}
               </ul>
             )}
-          </div>
+          </div> */}
+
+          {hasUsage && hasIngredients ? (
+            <>
+              <div className="border-b flex gap-4 border-gray-200 mb-4">
+                <button
+                  className={`py-2 text-sm ${
+                    tab === "usage"
+                      ? "border-b-2 text-color border-[#404040]"
+                      : "text-color"
+                  }`}
+                  onClick={() => setTab("usage")}
+                >
+                  {t("usage")}
+                </button>
+                <button
+                  className={`py-2 text-sm ${
+                    tab === "ingredients"
+                      ? "border-b-2 text-color border-[#404040]"
+                      : "text-color"
+                  }`}
+                  onClick={() => setTab("ingredients")}
+                >
+                  {t("ingredients")}
+                </button>
+              </div>
+
+              <div className="text-sm leading-relaxed w-full text-color">
+                {tab === "usage" && <p>{product.how_to_use}</p>}
+                {tab === "ingredients" && (
+                  <ul className="list-disc list-inside text-[#404040]">
+                    {product.ingredients}
+                  </ul>
+                )}
+              </div>
+            </>
+          ) : hasUsage ? (
+            <>
+              <h4 className="text-sm font-semibold mb-2">{t("usage")}</h4>
+              <p className="text-sm leading-relaxed w-full text-color">
+                {product.how_to_use}
+              </p>
+            </>
+          ) : hasIngredients ? (
+            <>
+              <h4 className="text-sm font-semibold mb-2">{t("ingredients")}</h4>
+              <ul className="list-disc list-inside text-sm text-[#404040]">
+                {product.ingredients}
+              </ul>
+            </>
+          ) : null}
         </div>
       </div>
       <Title className="text-start text-color mb-4">
         {t("popularProducts")}
       </Title>
-      {/* <Swiper
+      <Swiper
         controlBlock={false}
-        itemsLength={Math.round(products.length / 4)}
+        itemsLength={Math.round(product.additional_recomendations.length / 4)}
         widthPercent={20}
-        items={products.map((product) => (
+        items={product.additional_recomendations.map((product) => (
           <ShopItem key={product.id} product={product} />
         ))}
-      /> */}
+      />
     </section>
   );
 }

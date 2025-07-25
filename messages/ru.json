@@ -650,7 +650,8 @@
     "addToCart": "В корзину",
     "usage": "Способ применения",
     "ingredients": "Список ингредиентов",
-    "popularProducts": "Популярные товары"
+    "popularProducts": "Популярные товары",
+    "added": "Добавлено"
   },
   "QuickProductSection": {
     "product": "Товар",

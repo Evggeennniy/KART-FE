@@ -3,18 +3,24 @@
 import { useInput } from "../../hooks/useInput";
 import Button from "../../shared/ui/button/Button";
 import Field from "../../shared/ui/Field/Field";
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import PhoneInput from "../../shared/ui/PhoneInput/PhoneInput";
 import { useLocale, useTranslations } from "next-intl";
 import Title from "../../shared/ui/title/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { getDeliveryDetailsAction } from "../../redux/reducer/authSlice";
+import {
+  getDeliveryDetailsAction,
+  patchDeliveryDetailsAction,
+} from "../../redux/reducer/authSlice";
+import { API_URL } from "../../data/url";
+import { Check, CheckCheck, TicketSlash } from "lucide-react";
 
 function DeliverForm() {
   const t = useTranslations("DeliverForm");
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const { deliveryData, loading } = useSelector((state) => state.auth);
+  const [success, setSuccess] = useState(false);
   const locale = useLocale();
   const {
     value: nameValue,
@@ -110,6 +116,8 @@ function DeliverForm() {
     hasError: phoneError,
     setInputState: setPhoneNumberValue,
   } = useInput("", (val) => /^\d{6,14}$/.test(val));
+
+  const successTimeout = useRef(null);
 
   useEffect(() => {
     if (deliveryData) {
@@ -213,52 +221,54 @@ function DeliverForm() {
     dispatch(getDeliveryDetailsAction(locale));
   }, [locale]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const required = [
-      nameValue,
-      surnameValue,
-      emailValue,
-      adressValue,
-      houseValue,
-      countryValue,
-      postalCodeValue,
-      phoneNumberValue,
-    ];
-
-    const hasErrors =
-      nameError ||
-      surnameError ||
-      emailError ||
-      adressError ||
-      houseError ||
-      countryError ||
-      postalCodeError ||
-      phoneError;
-
-    if (hasErrors || required.some((val) => !val.trim())) {
-      setError(t("error"));
-      return;
-    }
+    setError(null);
 
     const data = {
-      name: nameValue,
-      surname: surnameValue,
-      email: emailValue,
-      phone: countryCode + phoneNumberValue,
-      adress: adressValue,
-      house: houseValue,
-      postalCode: postalCodeValue,
-      country: countryValue,
+      delivery_first_name: nameValue,
+      delivery_last_name: surnameValue,
+      delivery_email: emailValue,
+      delivery_street_address: adressValue,
+      delivery_aprt_number: houseValue,
+      delivery_postal_code: postalCodeValue,
+      delivery_country_region: countryValue,
+      delivery_city: cityValue,
+      delivery_country_code: countryCode,
+      delivery_phone: phoneNumberValue,
+      company_name: nameCompanyValue.trim() || undefined,
+      id_or_vat_number: VATNumValue.trim() || undefined,
+      eori_number: EORINumber.trim() || undefined,
     };
 
-    if (nameCompanyValue.trim()) data.companyName = nameCompanyValue;
-    if (VATNumValue.trim()) data.VATNumber = VATNumValue;
-    if (EORINumber.trim()) data.EORINumber = EORINumber;
-    console.log("Delivery data:", deliveryData);
+    Object.keys(data).forEach(
+      (key) => data[key] === undefined && delete data[key]
+    );
 
-    setError(null);
+    Object.keys(data).forEach(
+      (key) => data[key] === undefined && delete data[key]
+    );
+
+    try {
+      await dispatch(
+        patchDeliveryDetailsAction({
+          locale,
+          payload: JSON.stringify(data),
+        })
+      ).unwrap();
+
+      setSuccess(true);
+
+      if (successTimeout.current) clearTimeout(successTimeout.current);
+      successTimeout.current = setTimeout(() => {
+        setSuccess(false);
+      }, 1000);
+    } catch (err) {
+      setError(t("error"));
+      setSuccess(false);
+    }
+    console.log("Delivery data:", data);
   };
 
   return (
@@ -391,7 +401,7 @@ function DeliverForm() {
       </div>
       {error && <p className="text-red-500">{error}</p>}
       <Button type="submit" className=" w-fit">
-        {t("save")}
+        {(success === true && <Check />) || t("save")}
       </Button>
     </form>
   );

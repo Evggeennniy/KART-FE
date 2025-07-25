@@ -5,6 +5,7 @@ import {
   removeFromCart,
 } from "../../redux/reducer/cartSlice";
 import { Minus, Plus, X } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 import { useDispatch } from "react-redux";
 
@@ -22,7 +23,14 @@ export default function ProductItem({ product }) {
     <div className="rounded-2xl shadow-[0px_2px_10px_rgba(0,0,0,0.1)] p-4">
       <div className="hidden md:grid grid-cols-[2fr_1.5fr_0.5fr] items-center text-[#848484]">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-16 bg-gray-200 rounded" />
+          <div className="rounded" />
+          <Image
+            src={product.image}
+            alt="product image"
+            width={48} // or any appropriate value in pixels
+            height={64}
+            className="w-12 h-16"
+          />
           <div>
             <div className="text-[#848484]">{product.title}</div>
           </div>

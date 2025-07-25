@@ -44,17 +44,19 @@ function ProductItem({ product }) {
         <div className="flex gap-2 items-center">
           <div className="w-12 h-12 relative overflow-hidden">
             <Image
-              src={productImg}
-              alt={product?.title}
+              src={product.image1}
+              alt={product?.name}
               fill
               className="object-contain"
             />
           </div>
           <span className="text-sm sm:text-lg text-[#848484]">
-            {product?.title}
+            {product?.name}
           </span>
         </div>
-        <div className="text-lg text-[#848484] text-center">#{product?.id}</div>
+        <div className="text-lg text-[#848484] text-start">
+          #{product?.code}
+        </div>
       </div>
 
       <div className="flex w-full sm:w-2/5 justify-between items-center">
